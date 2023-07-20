@@ -1,3 +1,4 @@
+import os
 from datetime import timedelta
 
 CORS_ALLOWED_ORIGINS = [
@@ -19,6 +20,6 @@ SIMPLE_JWT = {
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "ROTATE_REFRESH_TOKENS": False,
     "BLACKLIST_AFTER_ROTATION": False,
-    "SIGNING_KEY": "insecure_simple_jwt_key",
+    "SIGNING_KEY": os.environ.get("JWT_SECRET_KEY"),
     "AUTH_HEADER_TYPES": ("Bearer",),
 }
