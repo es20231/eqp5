@@ -10,3 +10,13 @@ from api.models import User
 
 class UserAPIView(APIView):
     permission_classes = [IsAuthenticated,]
+
+    def post(self, request: HttpRequest) -> Response:
+        try:
+            data = request.data
+            serializers = UserSerializer(data=data)
+            serializers.is_valid(raise_exception=True)
+            serializers.save()
+            return Response(data=serializers.data, status=status.HTTP_201_CREATED)
+        except Exception as error:
+            return Response(data={"error": str(error)}, status=status.HTTP_400_BAD_REQUEST)
