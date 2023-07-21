@@ -11,6 +11,11 @@ from api.models import User
 class UserAPIView(APIView):
     permission_classes = [IsAuthenticated,]
 
+    def get_permissions(self, *args, **kwargs):
+        if self.request.method == "POST":
+            return [AllowAny(),]
+        return super().get_permissions(*args, **kwargs)
+
     def post(self, request: HttpRequest) -> Response:
         try:
             data = request.data
