@@ -15,6 +15,12 @@ class UserAPIView(APIView):
     def get_queryset(self):
         return User.objects.all()
 
+    def get_object(self) -> User:
+        id = self.kwargs.get("id")
+        user = self.get_queryset().get(id=id)
+        self.check_object_permissions(self.request, user)
+        return user
+
     def get_permissions(self, *args, **kwargs):
         if self.request.method == "POST":
             return [AllowAny(),]
