@@ -43,7 +43,7 @@ class UserAPIView(APIView):
         try:
             data = request.data
             instance = self.get_object()
-            serializers = UserSerializer(data=data, instance=instance, partial=True)
+            serializers = UserSerializer(data=data, instance=instance, partial=True, context={"request": request})
             serializers.is_valid(raise_exception=True)
             serializers.save()
             return Response(data=serializers.data, status=status.HTTP_200_OK)
