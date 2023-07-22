@@ -15,6 +15,16 @@ virtualenv venv
 pip install -r requirements.txt
 ```
 
+## Criando e rodando as migrações
+```
+python manage.py makemigrations
+```
+
+## Aplicando as migrações
+```
+python manage.py migrate
+```
+
 ## Rodar o servidor localmente
 ```
 python manage.py runserver
