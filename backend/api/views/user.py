@@ -11,6 +11,9 @@ from api.models import User
 class UserAPIView(APIView):
     permission_classes = [IsAuthenticated,]
 
+    def get_queryset(self):
+        return User.objects.all()
+
     def get_permissions(self, *args, **kwargs):
         if self.request.method == "POST":
             return [AllowAny(),]
