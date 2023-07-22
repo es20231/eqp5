@@ -7,11 +7,10 @@ from rest_framework.views import APIView
 from api.serializers import UserSerializer
 from api.models import User
 from api.permissions import IsOwner
-from api.permissions import IsUserWithValidatedAccount
 
 
 class UserAPIView(APIView):
-    permission_classes = [IsAuthenticated, IsUserWithValidatedAccount]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         return User.objects.all()
@@ -26,7 +25,7 @@ class UserAPIView(APIView):
         if self.request.method == "POST":
             return [AllowAny(),]
         if self.request.method == "PATCH":
-            return [IsAuthenticated(), IsOwner(), IsUserWithValidatedAccount()]
+            return [IsAuthenticated(), IsOwner()]
         return super().get_permissions(*args, **kwargs)
 
     def post(self, request: HttpRequest) -> Response:
