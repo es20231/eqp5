@@ -36,3 +36,13 @@ class ProfileAPIView(APIView):
             return Response(data=results, status=status.HTTP_200_OK)
         except Exception as error:
             return Response(data={"error": str(error)}, status=status.HTTP_400_BAD_REQUEST)
+        
+    def patch(self, request: HttpRequest, id: int) -> Response:
+        try:
+            profile = self.get_object()
+            serializer = ProfileSerializer(data=request.data, instance=profile, partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(data=serializer.data, status=status.HTTP_200_OK)
+        except Exception as error:
+            return Response(data={"error": str(error)}, status=status.HTTP_400_BAD_REQUEST)
