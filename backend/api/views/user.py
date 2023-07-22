@@ -41,7 +41,7 @@ class UserAPIView(APIView):
     def patch(self, request: HttpRequest, id: int) -> Response:
         try:
             data = request.data
-            instance = User.objects.get(id=id)
+            instance = self.get_object()
             serializers = UserSerializer(data=data, instance=instance, partial=True)
             serializers.is_valid(raise_exception=True)
             serializers.save()
