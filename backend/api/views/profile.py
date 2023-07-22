@@ -15,19 +15,23 @@ class ProfileAPIView(APIView):
     def get_queryset(self):
         return Profile.objects.all()
     
-    def get(self, request: HttpRequest, id: int) -> Response:
+    def get(self, request: HttpRequest, id: int = None) -> Response:
         try:
-            results = self.get_queryset().get(id=id)
+            if id:
+                object = self.get_queryset().get(id=id)
+                results = ProfileSerializer(instance=object, context={"request": request}).data
             if not id:
                 params = request.query_params.copy()
                 params = {key: params[key] for key in params.keys()}
                 per_page = int(params.pop("per_page", 10))
                 page = int(params.pop("page", 1))
+                objects = self.get_queryset()
                 results = paginate_response(
-                    items=self.get_queryset(),
+                    items=objects,
                     serializer=ProfileSerializer,
                     per_page=per_page,
-                    page=page
+                    page=page,
+                    context= {"request": request}
                 )
             return Response(data=results, status=status.HTTP_200_OK)
         except Exception as error:
