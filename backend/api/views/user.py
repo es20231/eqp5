@@ -6,6 +6,7 @@ from rest_framework.views import APIView
 
 from api.serializers import UserSerializer
 from api.models import User
+from api.permissions import IsOwner
 
 
 class UserAPIView(APIView):
@@ -17,6 +18,8 @@ class UserAPIView(APIView):
     def get_permissions(self, *args, **kwargs):
         if self.request.method == "POST":
             return [AllowAny(),]
+        if self.request.method == "PATCH":
+            return [IsAuthenticated(), IsOwner()]
         return super().get_permissions(*args, **kwargs)
 
     def post(self, request: HttpRequest) -> Response:
