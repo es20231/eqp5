@@ -23,6 +23,7 @@ class CustomUserManager(BaseUserManager):
         other_fields.setdefault("is_active", True)
         other_fields.setdefault("is_staff", True)
         other_fields.setdefault("is_superuser", True)
+        other_fields.setdefault("validated_user", True)
 
         user = self.create_user(username, email, phone_number, password, **other_fields)
         user.save()
