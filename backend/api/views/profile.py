@@ -15,6 +15,12 @@ class ProfileAPIView(APIView):
     def get_queryset(self):
         return Profile.objects.all()
     
+    def get_object(self) -> Profile:
+        id = self.kwargs.get("id")
+        profile = self.get_queryset().get(id=id)
+        self.check_object_permissions(self.request, profile)
+        return profile
+    
     def get(self, request: HttpRequest, id: int = None) -> Response:
         try:
             if id:
