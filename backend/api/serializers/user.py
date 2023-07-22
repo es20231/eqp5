@@ -3,9 +3,15 @@ from api.models import User
 
 
 class UserSerializer(serializers.ModelSerializer):
+    profile = serializers.HyperlinkedRelatedField(
+        many=False,
+        view_name="api:profile_api_detail",
+        read_only=True,
+        lookup_url_kwarg="id"
+    )
     class Meta:
         model = User
-        fields = ["id", "full_name", "username", "email", "password", "is_active", "is_superuser"]
+        fields = ["id", "full_name", "username", "email", "password", "is_active", "is_superuser", "profile"]
 
     def create(self, validated_data: dict) -> User:
         return User.objects.create_user(**validated_data)
