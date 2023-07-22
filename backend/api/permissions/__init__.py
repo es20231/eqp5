@@ -1,1 +1,1 @@
-from .is_owner import IsOwner
+from .is_account_owner import IsAccountOwner
