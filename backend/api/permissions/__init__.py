@@ -1,2 +1,1 @@
 from .is_owner import IsOwner
-from .is_user_with_validated_account import IsUserWithValidatedAccount
