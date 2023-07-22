@@ -21,6 +21,11 @@ class ProfileAPIView(APIView):
         self.check_object_permissions(self.request, profile)
         return profile
     
+    def get_permissions(self):
+        if self.request.method == "PATCH":
+            return [IsAuthenticated(), IsProfileOwner()]
+        return super().get_permissions()
+    
     def get(self, request: HttpRequest, id: int = None) -> Response:
         try:
             if id:
