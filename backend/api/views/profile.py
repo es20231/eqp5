@@ -7,6 +7,7 @@ from rest_framework.views import APIView
 from api.serializers import ProfileSerializer
 from api.models import Profile
 from api.utils import paginate_response
+from api.permissions import IsProfileOwner
 
 
 class ProfileAPIView(APIView):
@@ -51,7 +52,7 @@ class ProfileAPIView(APIView):
     def patch(self, request: HttpRequest, id: int) -> Response:
         try:
             profile = self.get_object()
-            serializer = ProfileSerializer(data=request.data, instance=profile, partial=True)
+            serializer = ProfileSerializer(data=request.data, instance=profile, partial=True, context={"request": request})
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(data=serializer.data, status=status.HTTP_200_OK)
