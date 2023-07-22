@@ -11,3 +11,6 @@ from api.utils import paginate_response
 
 class ProfileAPIView(APIView):
     permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Profile.objects.all()
