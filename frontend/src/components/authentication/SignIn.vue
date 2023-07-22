@@ -5,29 +5,40 @@
                 <div class="card-body p-0">
                     <div class="p-5">
                         <div class="text-center">
-                            <img src="../assets/img/img-logo.png" alt="Logo" class="mb-4" style="max-width: 80px;">
-                            <h1 class="h4 text-gray-900 mb-4">PostBook</h1>
+                            <img :src="require('@/assets/img/img-logo.png')" alt="Logo" class="mb-2"
+                                style="max-width: 80px;">
+                            <h1 class="text-gray-900 mb-4">PostBook</h1>
                         </div>
                         <form class="user mb-3">
-                            <!-- Div de alerta para exibir a mensagem de resposta -->
                             <div v-if="responseMessage" :class="responseMessageType" class="alert mb-3">
                                 {{ responseMessage }}
                             </div>
                             <div class="form-group mb-4">
-                                <input type="email" class="form-control form-control-user"
-                                    :class="{ 'is-invalid': emailError }" id="exampleInputEmail" aria-describedby="emailHelp"
-                                    placeholder="E-mail" v-model="email" @input="validateEmail">
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fa-solid fa-envelope p-1"></i>
+                                    </span>
+                                    <input type="email" class="form-control form-control-user"
+                                        :class="{ 'is-invalid': emailError }" id="exampleInputEmail"
+                                        aria-describedby="emailHelp" placeholder="E-mail" v-model="email"
+                                        @input="validateEmail">
+                                </div>
                             </div>
                             <div class="form-group mb-4">
-                                <input type="password" class="form-control form-control-user"
-                                    :class="{ 'is-invalid': passwordError }" id="exampleInputPassword" placeholder="Senha"
-                                    v-model="password" @input="validatePassword">
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fa-solid fa-lock p-1"></i>
+                                    </span>
+                                    <input type="password" class="form-control form-control-user"
+                                        :class="{ 'is-invalid': passwordError }" id="exampleInputPassword"
+                                        placeholder="Senha" v-model="password" @input="validatePassword">
+                                </div>
                             </div>
-                            <button @click.prevent="submitForm" class="btn btn-primary btn-user btn-block">Login</button>
+                            <button @click.prevent="submitForm" class="btn btn-primary btn-user btn-block">Entrar</button>
                         </form>
                         <div class="d-flex justify-content-between">
                             <div>
-                                <a class="small" href="forgot-password.html">Esqueceu a senha?</a>
+                                <router-link to="/forgot-password" class="small">Esqueceu a senha?</router-link>
                             </div>
                             <div>
                                 <router-link to="/sign-up" class="small">Criar conta!</router-link>
