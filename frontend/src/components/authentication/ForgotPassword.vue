@@ -43,17 +43,18 @@
                 </div>
             </div>
         </div>
-        <UserNotFoundErrorModal v-if="!userExists" :show="!userExists" @close="userExists = true" />
+        <ModalError v-if="!userExists" :show="!userExists" :message="errorMessages.userNotFound"
+            @close="userExists = true" />
     </div>
 </template>
   
 <script>
-import UserNotFoundErrorModal from '@/components/err/UserNotFoundErrorModal.vue';
+import ModalError from '@/components/err/ModalError.vue'; // Importe o componente ModalError
 import api from '@/config/api';
 
 export default {
     components: {
-        UserNotFoundErrorModal,
+        ModalError,
     },
     data() {
         return {
@@ -65,6 +66,10 @@ export default {
             timeRemaining: 30,
             showConfirmation: false,
             userExists: true,
+            errorMessages: {
+                userNotFound: "Usuário não encontrado. Por favor, verifique o e-mail informado.",
+                genericError: "Erro ao processar a solicitação. Por favor, tente novamente mais tarde.",
+            },
         };
     },
     computed: {
@@ -102,16 +107,16 @@ export default {
                     if (error.response && error.response.status === 404) {
                         this.userExists = false;
                     } else {
-                        console.error(error);
+                        this.showErrorModal();
                     }
                 } finally {
                     this.loading = false;
                 }
             }
         },
-        clearEmailError() {
-            this.emailError = false;
-            this.emailErrorMessage = "";
+        showErrorModal() {
+            this.$refs.errorModal.show = true;
+            this.$refs.errorModal.message = this.errorMessages.genericError;
         },
         startResendTimer() {
             this.showResendButton = true;
