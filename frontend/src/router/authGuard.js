@@ -8,7 +8,7 @@ async function isAuthenticated() {
     }
 
     try {
-        const response = await api.post("/token/verify/", { token });
+        const response = await api.post("/login/verify/", { token });
         return response.status === 200;
     } catch (error) {
         return false;
