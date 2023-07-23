@@ -63,15 +63,13 @@ class PostAPIView(APIView):
 
                 if "is_posted" in params:
                     filters["is_posted"] = eval(params.pop("is_posted").title())
-                if "created_at" in params:
-                    filters
                 if "profile_id" in params:
                     filters["profile__id"] = params.pop("profile_id")
                 if "user_id" in params:
                     filters["profile__user__id"] = params.pop("user_id")
                 if "username" in params:
                     filters["profile__user__username"] = params.pop("username")
-                if "my_posts" in params:
+                if "my_posts" in params and eval(params.pop("my_post").title()):
                     filters["profile__user__id"] = self.request.user.id
                 
                 objects = self.get_queryset().filter(**filters).order_by(ordering)
