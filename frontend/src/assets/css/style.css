@@ -1837,8 +1837,8 @@ fieldset:disabled a.btn {
 
 .btn-primary:hover {
   color: #fff;
-  background-color: #2e59d9;
-  border-color: #2653d4
+  background-color: #4732bb;
+  border-color: #4732bb
 }
 
 .btn-primary.focus,
@@ -5386,6 +5386,27 @@ a.close.disabled {
   .modal-xl {
     max-width: 1140px
   }
+}
+
+.modal-header {
+  background-color: #5845C4;
+  color: white;
+}
+
+.modal {
+  display: block;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-dialog {
+  margin-top: 10vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: flex-start;
 }
 
 .tooltip {

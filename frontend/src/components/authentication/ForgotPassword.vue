@@ -7,7 +7,7 @@
                         <div class="text-center">
                             <img :src="require('@/assets/img/img-logo.png')" alt="Logo" class="mb-1"
                                 style="max-width: 80px;">
-                            <h1 class="text-gray-900">PostBook</h1>
+                            <h1 class="text-gray-900 mb-0">PostBook</h1>
                         </div>
                         <form class="user mb-1">
                             <p class="text-center small">Enviaremos um e-mail para redefinir sua senha. Pegue a sua senha
@@ -31,10 +31,7 @@
                                 <span v-if="loading">
                                     <i class="fa-solid fa-spinner-third fa-spin"></i> Enviando...
                                 </span>
-                                <span v-else-if="showResendButton">
-                                    <i class="fa-solid fa-clock"></i> Reenviar ({{ timeRemaining }} s)
-                                </span>
-                                <span v-else>Recuperar Senha</span>
+                                <span v-else>{{ buttonText }}</span>
                             </button>
                         </form>
                         <div class="d-flex justify-content-center">
@@ -46,13 +43,18 @@
                 </div>
             </div>
         </div>
+        <UserNotFoundErrorModal v-if="!userExists" :show="!userExists" @close="userExists = true" />
     </div>
 </template>
   
 <script>
+import UserNotFoundErrorModal from '@/components/err/UserNotFoundErrorModal.vue';
 import api from '@/config/api';
 
 export default {
+    components: {
+        UserNotFoundErrorModal,
+    },
     data() {
         return {
             email: "",
@@ -62,49 +64,55 @@ export default {
             showResendButton: false,
             timeRemaining: 30,
             showConfirmation: false,
+            userExists: true,
         };
     },
-
+    computed: {
+        buttonText() {
+            if (this.loading) {
+                return "Enviando...";
+            } else if (this.showResendButton) {
+                return `Reenviar (${this.timeRemaining} s)`;
+            } else {
+                return "Recuperar Senha";
+            }
+        },
+    },
     methods: {
         validateEmail() {
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             this.emailError = !emailRegex.test(this.email);
             this.emailErrorMessage = this.emailError ? "Por favor, insira um e-mail válido." : "";
         },
-
-        submitForm() {
+        async submitForm() {
             this.validateEmail();
 
             if (!this.emailError) {
                 this.loading = true;
                 this.startResendTimer();
-                this.showConfirmation = true;
 
-                // api.post('/', { email: this.email })
-                //     .then((response) => {
-                //         this.showConfirmation = true;
-                //         setTimeout(() => {
-                //             this.showConfirmation = false;
-                //         }, 3000);
-                //     })
-                //     .catch((error) => {
-                //         console.error(error);
-                //     })
-                //     .finally(() => {
-                //         this.loading = false;
-                //     });
+                try {
+                    await api.post('/users/forgot-password/', { email: this.email });
+                    this.showConfirmation = true;
+                    setTimeout(() => {
+                        this.showConfirmation = false;
+                    }, 3000);
+                    this.userExists = true;
+                } catch (error) {
+                    if (error.response && error.response.status === 404) {
+                        this.userExists = false;
+                    } else {
+                        console.error(error);
+                    }
+                } finally {
+                    this.loading = false;
+                }
             }
         },
-
-        closeModal() {
-            this.showModal = false;
-        },
-
         clearEmailError() {
             this.emailError = false;
             this.emailErrorMessage = "";
         },
-
         startResendTimer() {
             this.showResendButton = true;
             this.timeRemaining = 30;
@@ -117,7 +125,6 @@ export default {
                 }
             }, 1000);
         },
-
         resendEmail() {
             this.showResendButton = false;
             this.submitForm();
@@ -125,27 +132,3 @@ export default {
     },
 };
 </script>
-  
-<style scoped>
-/* Estilos personalizados para o modal */
-.modal-header {
-    background-color: #5845C4;
-    color: white;
-}
-
-.modal {
-    display: block;
-    background-color: rgba(0, 0, 0, 0.5);
-}
-
-.modal-dialog {
-    margin-top: 10vh;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: flex;
-    align-items: flex-start;
-}
-</style>
