@@ -13,6 +13,13 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ["id", "full_name", "username", "email", "password", "is_active", "is_superuser", "profile"]
 
+    def get_email_format(self, user: User) -> dict:
+        return {
+            "subject": "PostBook - Conta Criada com Sucesso",
+            "message": f"Oi, {user.full_name}!\n\nSua conta no PostBook está pronta.Se você não se cadastrou no PostBook recentemente, por favor ignore este email.\n\nAté breve!\n\nEquipe de Suporte/PostBook",
+            "recipient_list": [user.email],
+            "from_email": settings.EMAIL_HOST_USER
+        }
     def create(self, validated_data: dict) -> User:
         return User.objects.create_user(**validated_data)
     
