@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from api.models import User
+from django.core.mail import send_mail
+from django.conf import settings
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -20,6 +22,14 @@ class UserSerializer(serializers.ModelSerializer):
             "recipient_list": [user.email],
             "from_email": settings.EMAIL_HOST_USER
         }
+
+    def send_created_account_email(self, user: User) -> int:
+        try:
+            email_format = self.get_email_format(user)
+            return send_mail(**email_format)
+        except Exception as error:
+            return 0
+
     def create(self, validated_data: dict) -> User:
         return User.objects.create_user(**validated_data)
     
