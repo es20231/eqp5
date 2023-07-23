@@ -5388,6 +5388,27 @@ a.close.disabled {
   }
 }
 
+.modal-header {
+  background-color: #5845C4;
+  color: white;
+}
+
+.modal {
+  display: block;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-dialog {
+  margin-top: 10vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: flex-start;
+}
+
 .tooltip {
   position: absolute;
   z-index: 1070;
