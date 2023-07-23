@@ -12,23 +12,24 @@
                             <div class="form-group mb-3">
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fa-solid fa-envelope p-1"></i></span>
-                                    <input type="email" class="form-control form-control-user"
-                                        :class="{ 'is-invalid': emailError }" id="exampleInputEmail"
-                                        aria-describedby="emailHelp" placeholder="E-mail" v-model="email"
-                                        @input="validateEmail" />
+                                    <input type="email" class="form-control form-control-user" :class="inputClass('email')"
+                                        id="exampleInputEmail" aria-describedby="emailHelp"
+                                        :placeholder="inputPlaceholder('email')" v-model="email" />
                                 </div>
-                                <div v-if="emailError" class="text-danger text-right small mt-1">{{ emailErrorMessage }}
-                                </div>
+                                <div v-if="fieldErrors.email" class="text-danger text-right small mt-1">{{ fieldErrors.email
+                                }}</div>
                             </div>
                             <div class="form-group mb-3">
                                 <div class="input-group">
-                                    <span class="input-group-text"><i class="fa-solid fa-lock p-1"></i></span>
-                                    <input type="password" class="form-control form-control-user"
-                                        :class="{ 'is-invalid': passwordError }" id="exampleInputPassword"
-                                        placeholder="Senha" v-model="password" @input="validatePassword" />
+                                    <span class="input-group-text">
+                                        <i class="fa-solid fa-lock p-1"></i>
+                                    </span>
+                                    <input :type="showPassword ? 'text' : 'password'" class="form-control form-control-user"
+                                        :class="inputClass('password')" id="exampleInputPassword"
+                                        :placeholder="inputPlaceholder('password')" v-model="password" />
                                 </div>
-                                <div v-if="passwordError" class="text-danger text-right small mt-1">{{ passwordErrorMessage
-                                }}</div>
+                                <div v-if="fieldErrors.password" class="text-danger text-right small mt-1">{{
+                                    fieldErrors.password }}</div>
                             </div>
                             <button @click.prevent="submitForm" class="btn btn-primary btn-user btn-block">Entrar</button>
                         </form>
@@ -44,7 +45,6 @@
                 </div>
             </div>
         </div>
-
         <!-- Modal -->
         <div class="modal" v-if="responseMessage" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -61,92 +61,104 @@
         <!-- End Modal -->
     </div>
 </template>
-  
+
 <script>
 import api from "@/config/api";
+import CookieHelper from "@/util/cookieHelper";
 
 export default {
     data() {
         return {
             email: "",
             password: "",
-            emailError: false,
-            passwordError: false,
-            emailErrorMessage: "",
-            passwordErrorMessage: "",
             responseMessage: "",
             responseMessageType: "",
+            showPassword: false,
+            fieldErrors: {
+                email: "",
+                password: "",
+            },
         };
     },
-
     methods: {
-        clearAlert() {
-            this.responseMessage = "";
-            this.responseMessageType = "";
-        },
-
-        validateEmail() {
-            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            this.emailError = !emailPattern.test(this.email);
-            this.emailErrorMessage = this.emailError ? "Insira um e-mail válido." : "";
-        },
-
-        validatePassword() {
-            this.passwordError = this.password.length < 6;
-            this.passwordErrorMessage = this.passwordError ? "A senha deve conter pelo menos 6 caracteres." : "";
-        },
-
-        async submitForm() {
-            this.validateEmail();
-            this.validatePassword();
-
-            if (!this.emailError && !this.passwordError) {
-                try {
-                    const response = await api.post("/login", {
-                        email: this.email,
-                        password: this.password,
-                    });
-
-                    if (response.status === 200 && response.data.success) {
-                        this.responseMessage = "Login bem-sucedido!";
-                        this.responseMessageType = "alert-success";
-                        setTimeout(() => {
-                            this.closeModal();
-                            this.$router.push('/index');
-                        }, 3000);
-                    } else {
-                        this.responseMessage = "Credenciais inválidas. Por favor, tente novamente.";
-                        this.responseMessageType = "alert-danger";
-                    }
-                } catch (error) {
-                    this.responseMessage = "Erro ao fazer login. Por favor, tente novamente mais tarde.";
-                    this.responseMessageType = "alert-danger";
-                }
-
-                // Clear the alert after 5 seconds (5000ms)
-                setTimeout(() => {
-                    this.clearAlert();
-                }, 5000);
-
-                this.emailErrorMessage = "";
-                this.passwordErrorMessage = "";
+        validateField(fieldName) {
+            switch (fieldName) {
+                case "email":
+                    this.fieldErrors.email = this.validateEmail() ? "" : "Por favor, insira um e-mail válido.";
+                    break;
+                case "password":
+                    this.fieldErrors.password = this.validatePassword() ? "" : "A senha deve conter pelo menos 6 caracteres.";
+                    break;
+                default:
+                    break;
             }
         },
+        validateEmail() {
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailPattern.test(this.email);
+        },
+        validatePassword() {
+            return this.password.length >= 6;
+        },
+        inputClass(fieldName) {
+            return {
+                "is-invalid": this.fieldErrors[fieldName],
+            };
+        },
+        inputPlaceholder(fieldName) {
+            return this.showPassword ? "Senha" : fieldName === "email" ? "E-mail" : "Digite sua senha";
+        },
+        async submitForm() {
+            this.validateField("email");
+            this.validateField("password");
 
+            if (this.fieldErrors.email || this.fieldErrors.password) {
+                return;
+            }
+
+            try {
+                const response = await api.post("/login/", {
+                    email: this.email,
+                    password: this.password,
+                });
+
+                if (response.status === 200 && response.data && response.data.access) {
+                    const token = response.data.access;
+                    CookieHelper.setCookie("token", token, { secure: true });
+
+                    setTimeout(() => {
+                        this.closeModal();
+                        // this.$router.push({ name: "index" });
+                    }, 1000);
+                } else {
+                    this.responseMessage = "E-mail ou senha incorretos. Por favor, tente novamente.";
+                    this.responseMessageType = "alert-danger";
+                }
+            } catch (error) {
+                if (error.response && error.response.status === 401) {
+                    this.responseMessage = "E-mail ou senha incorretos. Por favor, tente novamente.";
+                } else {
+                    this.responseMessage = "Erro ao fazer login. Por favor, verifique sua conexão e tente novamente mais tarde.";
+                }
+                this.responseMessageType = "alert-danger";
+            }
+        },
         closeModal() {
             this.responseMessage = "";
             this.responseMessageType = "";
         },
+        togglePasswordVisibility() {
+            this.showPassword = !this.showPassword;
+        },
     },
 };
 </script>
-  
+
 <style scoped>
 img {
     max-width: 80px;
 }
 
-/* Estilos personalizados para o modal */
 .modal {
     display: block;
     background-color: rgba(0, 0, 0, 0.5);

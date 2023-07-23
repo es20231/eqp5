@@ -1,11 +1,11 @@
 <template>
-  <router-view />
+    <router-view />
 </template>
 
 <script>
 export default {
-  mounted() {
-    document.title = "PostBook";
-  },
+    mounted() {
+        document.title = "PostBook";
+    }
 };
 </script>
