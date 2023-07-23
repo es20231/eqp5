@@ -10,9 +10,6 @@
                             <h1 class="mb-4">PostBook</h1>
                         </div>
                         <form class="user mb-3">
-                            <div v-if="responseMessage" :class="responseMessageType" class="alert mb-3">
-                                {{ responseMessage }}
-                            </div>
                             <div class="form-group mb-4">
                                 <div class="input-group">
                                     <span class="input-group-text">
@@ -92,14 +89,19 @@
                 </div>
             </div>
         </div>
+        <modal-error :show="responseMessage" :message="responseMessage" @close="closeModal" />
     </div>
 </template>
-
+  
 <script>
 import api from "@/config/api";
 import CookieHelper from "@/util/cookieHelper";
+import ModalError from "@/components/err/ModalError.vue";
 
 export default {
+    components: {
+        ModalError,
+    },
     data() {
         return {
             username: "",
@@ -109,8 +111,7 @@ export default {
             confirmPassword: "",
             fields: ["username", "full_name", "email", "password", "confirmPassword"],
             errors: {},
-            responseMessage: "",
-            responseMessageType: "",
+            responseMessage: null,
         };
     },
     methods: {
@@ -141,6 +142,7 @@ export default {
         async submitForm() {
             this.errors = {};
             this.fields.forEach((field) => this.validateField(field));
+
             if (Object.values(this.errors).every((error) => !error)) {
                 try {
                     const formData = {
@@ -162,34 +164,33 @@ export default {
                             const token = loginResponse.data.access;
                             CookieHelper.setCookie("token", token, { secure: true });
 
-                            this.responseMessage = "Cadastro realizado com sucesso!";
-                            this.responseMessageType = "alert-success";
+                            this.showErrorMessage("Cadastro realizado com sucesso.");
                             setTimeout(() => {
                                 this.$router.push("/");
                             }, 3000);
-                        } else {
-                            this.handleLoginError();
                         }
                     } else {
-                        this.handleRegistrationError();
+                        this.showErrorMessage("Erro ao cadastrar. Por favor, tente novamente.");
                     }
                 } catch (error) {
-                    this.handleRegistrationError();
+                    if (error.response && error.response.status === 400) {
+                        this.showErrorMessage("O usuario ou email ja existem. Por favor, tente novamente.");
+                    } else {
+                        this.showErrorMessage("Erro ao cadastrar. Por favor, verifique sua conexão e tente novamente mais tarde.");
+                    }
                 }
             }
         },
-        handleRegistrationError() {
-            this.responseMessage = "Erro ao cadastrar. Por favor, tente novamente.";
-            this.responseMessageType = "alert-danger";
+        showErrorMessage(message) {
+            this.responseMessage = message;
         },
-        handleLoginError() {
-            this.responseMessage = "Erro ao fazer login. Por favor, tente novamente.";
-            this.responseMessageType = "alert-danger";
+        closeModal() {
+            this.responseMessage = null;
         },
     },
 };
 </script>
-
+  
 <style scoped>
 h1 {
     font-size: 2rem;
