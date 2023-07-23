@@ -18,6 +18,8 @@ urlpatterns = [
     path('users/forgot-password/', views.ForgotPasswordAPIView.as_view(), name="api_forgot_password"),
     path('profiles/', views.ProfileAPIView.as_view(), name="profile_api_list"),
     path('profiles/<int:id>/', views.ProfileAPIView.as_view(), name="profile_api_detail"),
+    path('posts/', views.PostAPIView.as_view(), name="post_api_list"),
+    path('posts/<int:id>/', views.PostAPIView.as_view(), name="post_api_detail"),
 ]
 
 if settings.DEBUG:
