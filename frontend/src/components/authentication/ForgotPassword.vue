@@ -7,7 +7,7 @@
                         <div class="text-center">
                             <img :src="require('@/assets/img/img-logo.png')" alt="Logo" class="mb-1"
                                 style="max-width: 80px;">
-                            <h1 class="text-gray-900">PostBook</h1>
+                            <h1 class="text-gray-900 mb-0">PostBook</h1>
                         </div>
                         <form class="user mb-1">
                             <p class="text-center small">Enviaremos um e-mail para redefinir sua senha. Pegue a sua senha
@@ -78,21 +78,20 @@ export default {
             if (!this.emailError) {
                 this.loading = true;
                 this.startResendTimer();
-                this.showConfirmation = true;
 
-                // api.post('/', { email: this.email })
-                //     .then((response) => {
-                //         this.showConfirmation = true;
-                //         setTimeout(() => {
-                //             this.showConfirmation = false;
-                //         }, 3000);
-                //     })
-                //     .catch((error) => {
-                //         console.error(error);
-                //     })
-                //     .finally(() => {
-                //         this.loading = false;
-                //     });
+                api.post('/users/forgot-password/', { email: this.email })
+                    .then((response) => {
+                        this.showConfirmation = true;
+                        setTimeout(() => {
+                            this.showConfirmation = false;
+                        }, 3000);
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    })
+                    .finally(() => {
+                        this.loading = false;
+                    });
             }
         },
 

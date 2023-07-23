@@ -111,10 +111,8 @@ export default {
             errors: {},
             responseMessage: "",
             responseMessageType: "",
-            showModal: false,
         };
     },
-
     methods: {
         validateField(fieldName) {
             switch (fieldName) {
@@ -137,11 +135,9 @@ export default {
                     break;
             }
         },
-
         hasError(fieldName) {
             return this.errors[fieldName];
         },
-
         async submitForm() {
             this.errors = {};
             this.fields.forEach((field) => this.validateField(field));
@@ -178,17 +174,14 @@ export default {
                         this.handleRegistrationError();
                     }
                 } catch (error) {
-                    console.error("Erro ao fazer a requisição:", error);
                     this.handleRegistrationError();
                 }
             }
         },
-
         handleRegistrationError() {
             this.responseMessage = "Erro ao cadastrar. Por favor, tente novamente.";
             this.responseMessageType = "alert-danger";
         },
-
         handleLoginError() {
             this.responseMessage = "Erro ao fazer login. Por favor, tente novamente.";
             this.responseMessageType = "alert-danger";
