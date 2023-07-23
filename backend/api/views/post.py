@@ -14,4 +14,12 @@ class PostAPIView(APIView):
     def get_user_profile(self) -> Profile:
         user_id = self.request.user.id
         return Profile.objects.all().get(user__id=user_id)
-    
+
+    def post(self, request: HttpRequest) -> Post:
+        try:
+            serializer = PostSerializer(data=request.data, context={"request": request})
+            serializer.is_valid(raise_exception=True)
+            serializer.save(profile=self.get_user_profile())
+            return Response(data=serializer.data, status=status.HTTP_201_CREATED)
+        except Exception as error:
+            return Response(data={"error": str(error)}, status=status.HTTP_400_BAD_REQUEST)
