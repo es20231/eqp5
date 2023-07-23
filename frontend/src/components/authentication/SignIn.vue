@@ -122,13 +122,13 @@ export default {
                     password: this.password,
                 });
 
-                if (response.status === 200 && response.data && response.data.access) {
+                if (response.status === 200 && response.data.access) {
                     const token = response.data.access;
                     CookieHelper.setCookie("token", token, { secure: true });
 
                     setTimeout(() => {
                         this.closeModal();
-                        // this.$router.push({ name: "index" });
+                        this.$router.push({ name: "index" });
                     }, 1000);
                 } else {
                     this.responseMessage = "E-mail ou senha incorretos. Por favor, tente novamente.";
