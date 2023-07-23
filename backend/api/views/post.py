@@ -15,6 +15,9 @@ class PostAPIView(APIView):
         user_id = self.request.user.id
         return Profile.objects.all().get(user__id=user_id)
 
+    def get_queryset(self):
+        return Post.objects.all()
+
     def post(self, request: HttpRequest) -> Post:
         try:
             serializer = PostSerializer(data=request.data, context={"request": request})
