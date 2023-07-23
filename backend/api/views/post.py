@@ -45,16 +45,14 @@ class PostAPIView(APIView):
         
     def get(self, request: HttpRequest, id:int = None) -> Response:
         try:
+            params = self.format_query_strings()
             if id:
                 filters = {
-                    "is_posted": eval(request.query_params.pop("is_posted", "True").title())
+                    "is_posted": eval(params.pop("is_posted", "True").title())
                 }
                 object = self.get_object(**filters)
                 results = PostSerializer(instance=object, context={"request": request}).data
             elif not id:
-                params = request.query_params.copy()
-                params = {key: params[key] for key in params.keys()}
-
                 per_page = int(params.pop("per_page", 10))
                 page = int(params.pop("page", 1))
                 order_by = params.pop("order_by", "created_at")
@@ -76,7 +74,7 @@ class PostAPIView(APIView):
                 if "my_posts" in params:
                     filters["profile__user__id"] = self.request.user.id
                 
-                objects = self.get_queryset().filter(**filters)
+                objects = self.get_queryset().filter(**filters).order_by(ordering)
 
                 results = paginate_response(
                     items=objects,
