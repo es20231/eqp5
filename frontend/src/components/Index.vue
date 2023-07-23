@@ -19,6 +19,13 @@
                 </li>
                 <!-- Divider -->
                 <hr class="sidebar-divider">
+                <!-- Nav Item - Logout -->
+                <li class="nav-item">
+                    <a class="nav-link" @click="logout" href="#">
+                        <i class="fas fa-fw fa-sign-out-alt"></i>
+                        <span>Sair</span>
+                    </a>
+                </li>
             </ul>
             <!-- End of Sidebar -->
             <!-- Content Wrapper -->
@@ -90,6 +97,20 @@
         </div>
     </div>
 </template>
+
+<script>
+import api from "@/config/api";
+import Cookies from "js-cookie";
+
+export default {
+    methods: {
+        logout() {
+            Cookies.remove("token");
+            this.$router.push("/");
+        },
+    },
+};
+</script>
 
 <style scoped>
 h1 {
