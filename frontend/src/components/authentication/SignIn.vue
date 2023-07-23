@@ -45,34 +45,24 @@
                 </div>
             </div>
         </div>
-        <!-- Modal -->
-        <div class="modal" v-if="responseMessage" tabindex="-1" role="dialog">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-body" :class="responseMessageType">
-                        {{ responseMessage }}
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" @click="closeModal">Fechar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- End Modal -->
+        <modal-error :show="responseMessage" :message="responseMessage" @close="closeModal" />
     </div>
 </template>
-
+  
 <script>
 import api from "@/config/api";
 import CookieHelper from "@/util/cookieHelper";
+import ModalError from "@/components/err/ModalError.vue";
 
 export default {
+    components: {
+        ModalError,
+    },
     data() {
         return {
             email: "",
             password: "",
-            responseMessage: "",
-            responseMessageType: "",
+            responseMessage: null,
             fieldErrors: {
                 email: "",
                 password: "",
@@ -119,46 +109,27 @@ export default {
                 }
             } catch (error) {
                 if (error.response && error.response.status === 401) {
-                    this.responseMessage = "E-mail ou senha incorretos. Por favor, tente novamente.";
+                    this.showErrorMessage("E-mail ou senha incorretos. Por favor, tente novamente.");
                 } else {
-                    this.responseMessage = "Erro ao fazer login. Por favor, verifique sua conexão e tente novamente mais tarde.";
+                    this.showErrorMessage("Erro ao fazer login. Por favor, verifique sua conexão e tente novamente mais tarde.");
                 }
-
-                this.responseMessageType = "alert-danger";
                 setTimeout(() => {
                     this.closeModal();
                 }, 10000);
             }
         },
+        showErrorMessage(message) {
+            this.responseMessage = message;
+        },
         closeModal() {
-            this.responseMessage = "";
-            this.responseMessageType = "";
+            this.responseMessage = null;
         },
     },
 };
 </script>
-
+  
 <style scoped>
 img {
     max-width: 80px;
-}
-
-.modal {
-    display: block;
-    background-color: rgba(0, 0, 0, 0.5);
-}
-
-.modal-dialog {
-    margin-top: 10vh;
-}
-
-.alert-success {
-    background-color: #d4edda;
-    color: #155724;
-}
-
-.alert-danger {
-    background-color: #ffffff;
-    color: #721c24;
 }
 </style>
