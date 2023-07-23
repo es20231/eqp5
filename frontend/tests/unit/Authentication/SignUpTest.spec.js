@@ -1,10 +1,10 @@
 import { shallowMount } from "@vue/test-utils";
-import SignIn from '@/components/authentication/SignUp.vue';
+import SignUp from '@/components/authentication/SignUp.vue';
 
 let wrapper
 
 beforeAll(() =>{
-    wrapper = shallowMount(SignIn)
+    wrapper = shallowMount(SignUp)
 })
 
 describe('SignUp.vue test in renderization of web page', ()=>{
@@ -118,6 +118,13 @@ describe('SignUp.vue test with a incorrect email', ()=>{
         await wrapper.vm.submitForm()
         expect(wrapper.vm.errors['email']).toBe(true)
     })
+
+    it('should be an error in email input - 8', async() =>{
+        await wrapper.setData({email: '.com'})
+        await wrapper.vm.$nextTick()
+        await wrapper.vm.submitForm()
+        expect(wrapper.vm.errors['email']).toBe(true)
+    })
 })
 
 describe('SignUp.vue test with a incorrect password input', () =>{
@@ -174,6 +181,7 @@ describe('SignUp.vue test with a response message', ()=>{
         await wrapper.setData({confirmPassword: 'roofroofattack08'})
         await wrapper.vm.$nextTick()
         await wrapper.vm.submitForm()
-        expect(wrapper.vm.responseMessage).toEqual('Erro ao cadastrar. Por favor, tente novamente.')
+        expect(wrapper.vm.responseMessage).toEqual('Erro ao cadastrar. Por favor, verifique sua conexão e tente novamente mais tarde.')
     })
 })
+

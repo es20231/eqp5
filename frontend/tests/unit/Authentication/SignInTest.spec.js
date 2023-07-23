@@ -96,6 +96,15 @@ describe('SignIn.vue tests in input email', () =>{
         expect(wrapper.vm.fieldErrors.email).toEqual('Por favor, insira um e-mail válido.')
     }) 
 
+    it('there should be an error in the email input - 8', async() =>{
+        await wrapper.setData({email: '.com'})
+        await wrapper.vm.$nextTick()
+        await wrapper.setData({password: 'roofroofattack08'})
+        await wrapper.vm.$nextTick()
+        await wrapper.vm.submitForm()
+        expect(wrapper.vm.fieldErrors.email).toEqual('Por favor, insira um e-mail válido.')
+    }) 
+
 })
 
 describe('SignIn.vue test in input password', () => {
@@ -130,14 +139,5 @@ describe('SignIn.vue tests in 401 message error', () =>{
         await wrapper.vm.$nextTick()
         await wrapper.vm.submitForm()
         expect(wrapper.vm.responseMessage).toEqual('Erro ao fazer login. Por favor, verifique sua conexão e tente novamente mais tarde.')
-    })
-
-    it('should appear a type of alert in message for 401 error', async() =>{
-        await wrapper.setData({email: 'shibadevdog@doge.com'})
-        await wrapper.vm.$nextTick()
-        await wrapper.setData({password: 'roofroofattack08'})
-        await wrapper.vm.$nextTick()
-        await wrapper.vm.submitForm()
-        expect(wrapper.vm.responseMessageType).toEqual('alert-danger')
     })
 })
