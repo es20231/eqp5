@@ -29,6 +29,10 @@ class PostAPIView(APIView):
         if self.request.method in ["PATCH", "DELETE"]:
             return [IsAuthenticated(), IsPostOwner()]
         return super().get_permissions()
+    
+    def format_query_strings(self) -> dict:
+        params = self.request.query_params.copy()
+        return {key: params[key] for key in params.keys()}
 
     def post(self, request: HttpRequest) -> Post:
         try:
