@@ -50,7 +50,7 @@ class PostAPIView(APIView):
                     "is_posted": eval(request.query_params.pop("is_posted", "True").title())
                 }
                 object = self.get_object(**filters)
-                results = PostSerializer(instance=object).data
+                results = PostSerializer(instance=object, context={"request": request}).data
             elif not id:
                 params = request.query_params.copy()
                 params = {key: params[key] for key in params.keys()}
