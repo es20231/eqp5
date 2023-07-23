@@ -25,6 +25,11 @@ class PostAPIView(APIView):
         self.check_object_permissions(self.request, post)
         return post
     
+    def get_permissions(self):
+        if self.request.method in ["PATCH", "DELETE"]:
+            return [IsAuthenticated(), IsPostOwner()]
+        return super().get_permissions()
+
     def post(self, request: HttpRequest) -> Post:
         try:
             serializer = PostSerializer(data=request.data, context={"request": request})
