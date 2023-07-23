@@ -13,6 +13,7 @@ urlpatterns = [
     path('login/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('login/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('logout/', views.LogoutAPIView.as_view(), name="api_logout"),
+    path('users/me/', views.MeAPIView.as_view(), name="user_me_api"),
     path('users/', views.UserAPIView.as_view(), name="user_api_list"),
     path('users/<int:id>/', views.UserAPIView.as_view(), name="user_api_detail"),
     path('users/forgot-password/', views.ForgotPasswordAPIView.as_view(), name="api_forgot_password"),
