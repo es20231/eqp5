@@ -31,7 +31,9 @@ class UserSerializer(serializers.ModelSerializer):
             return 0
 
     def create(self, validated_data: dict) -> User:
-        return User.objects.create_user(**validated_data)
+        user = User.objects.create_user(**validated_data)
+        email = self.send_created_account_email(user)
+        return user
     
     def update(self, instance: User, validated_data: dict) -> User:
         if password := validated_data.pop("password", None):
