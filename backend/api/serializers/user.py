@@ -20,6 +20,7 @@ class UserSerializer(serializers.ModelSerializer):
         if password := validated_data.pop("password", None):
             instance.set_password(password)
         for key, value in validated_data.items():
+            if key in ["username"]: continue
             setattr(instance, key, value)
         instance.save()
         return instance
