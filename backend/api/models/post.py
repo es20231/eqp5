@@ -8,6 +8,7 @@ class Post(models.Model):
     image = models.ImageField(null=False, upload_to="posts/images/%Y/%m/%d")
     description = models.CharField(max_length=1000, null=True, blank=True)
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="posts")
+    is_posted = models.BooleanField(default=False, null=False)
 
     class Meta:
         verbose_name = "Post"
