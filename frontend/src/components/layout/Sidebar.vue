@@ -61,7 +61,7 @@ hr {
 }
 
 .sidebar-container {
-    width: 150px;
+    width: 100px;
     height: 100vh;
     background-color: #4732bb;
 }
