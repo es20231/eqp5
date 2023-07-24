@@ -19,10 +19,10 @@
         </div>
         <!-- Divider and Title for Images -->
         <div class="divider"></div>
-        <h3 class="images-title">Imagens na galeria</h3>
+        <h3 class="images-title">Imagens na galeria (10 ultimas)</h3>
         <!-- Image Gallery -->
         <div class="card-grid-container">
-            <div class="card-grid row">
+            <div class="card-grid row d-flex justify-content-start">
                 <div v-for="photo in photos" :key="photo.id" class="photo-card col-lg-4 col-md-4 col-sm-6 col-12">
                     <div class="card">
                         <a :href="photo.image" target="_blank">
@@ -61,6 +61,7 @@
                 </div>
             </div>
         </div>
+        <modal-error :show="responseMessage" :message="responseMessage" @close="closeModal" />
     </Layout>
 </template>
   
@@ -68,10 +69,12 @@
 import api from "@/config/api";
 import CookieHelper from "@/util/cookieHelper";
 import Layout from "@/components/layout/Layout.vue";
+import ModalError from "@/components/err/ModalError.vue";
 
 export default {
     components: {
         Layout,
+        ModalError,
     },
     data() {
         return {
@@ -79,23 +82,40 @@ export default {
             selectedPhotoId: null,
             selectedPhoto: null,
             uploading: false,
+            responseMessage: null
         };
     },
     methods: {
         onFileChange(event) {
             const file = event.target.files[0];
             if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    this.selectedPhoto = {
-                        url: e.target.result,
-                        file,
+                const maxSizeMB = 10;
+                const maxSizeBytes = maxSizeMB * 1024 * 1024;
+                if (file.size <= maxSizeBytes) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        this.selectedPhoto = {
+                            url: e.target.result,
+                            file,
+                        };
                     };
-                };
-                reader.readAsDataURL(file);
+                    reader.readAsDataURL(file);
+                } else {
+                    this.showErrorMessage("A imagem selecionada tem tamanho maior que o permitido.");
+                    this.clearSelectedPhoto();
+                    setTimeout(() => {
+                        this.closeModal();
+                    }, 10000);
+                }
             } else {
                 this.clearSelectedPhoto();
             }
+        },
+        showErrorMessage(message) {
+            this.responseMessage = message;
+        },
+        closeModal() {
+            this.responseMessage = null;
         },
         async uploadPhoto() {
             const formData = new FormData();
@@ -112,11 +132,12 @@ export default {
                         this.uploadProgress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
                     },
                 });
-
                 this.selectedPhoto = null;
                 this.fetchPhotos();
             } catch (error) {
-                console.error("Error uploading photo:", error);
+                if (error.response && error.response.status === 500) {
+                    this.showErrorMessage("Ocorreu um erro de conexão. Por favor, tente novamente mais tarde.");
+                }
                 this.uploading = false;
             }
         },
@@ -124,10 +145,9 @@ export default {
             this.selectedPhoto = null;
             this.$refs.fileInput.value = "";
         },
-
         async fetchPhotos() {
             try {
-                const response = await api.get("/posts/", {
+                const response = await api.get("/posts/?my_posts=true&is_posted=false", {
                     headers: {
                         Authorization: "Bearer " + CookieHelper.getCookie("token"),
                     },
@@ -135,21 +155,36 @@ export default {
                 this.photos = response.data.results;
                 this.clearSelectedPhoto();
             } catch (error) {
-                console.error("Error fetching photos:", error);
+                if (error.response && error.response.status === 500) {
+                    this.showErrorMessage("Ocorreu um erro de conexão. Por favor, tente novamente mais tarde.");
+                }else{
+                    this.showErrorMessage("Ocorreu um erro ao listar as imagens.");
+                }
                 this.clearSelectedPhoto();
+                setTimeout(() => {
+                    this.closeModal();
+                }, 10000);
             }
         },
         async deletePhoto() {
             try {
-                await api.delete("posts/" + this.selectedPhotoId, {
+                await api.delete(`/posts/${this.selectedPhotoId}/?is_posted=false`, {
                     headers: {
                         Authorization: "Bearer " + CookieHelper.getCookie("token"),
                     },
                 });
                 this.photos = this.photos.filter((photo) => photo.id !== this.selectedPhotoId);
                 this.hideDeleteConfirmation();
+                this.fetchPhotos();
             } catch (error) {
-                console.error("Error deleting photo:", error);
+                if (error.response && error.response.status === 500) {
+                    this.showErrorMessage("Ocorreu um erro de conexão. Por favor, tente novamente mais tarde.");
+                }else{
+                    this.showErrorMessage("Ocorreu um erro ao deletar a imagem.");
+                }
+                setTimeout(() => {
+                    this.closeModal();
+                }, 10000);
             }
         },
         showDeleteConfirmation(photoId) {
@@ -183,26 +218,23 @@ export default {
     margin-bottom: 16px;
 }
 
-
 .card-grid {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: flex-start;
+}
+
+.photo-card {
+    margin-bottom: 15px;
+    flex: 1;
 }
 
 .card {
     height: 300px;
     width: 300px;
-    /* Tamanho ajustado para 300x300 pixels */
     margin-bottom: 20px;
-    /* Espaçamento entre os cards */
     overflow: hidden;
     padding: 10px;
     position: relative;
-}
-
-.photo-card {
-    margin-bottom: 15px;
 }
 
 .card-img-top {
@@ -262,10 +294,7 @@ export default {
 
 .card-grid-container {
     max-height: 600px;
-    /* Altura máxima da div de rolagem */
     overflow-y: auto;
-    /* Habilita a rolagem vertical */
     overflow-x: hidden;
 }
 </style>
-  
