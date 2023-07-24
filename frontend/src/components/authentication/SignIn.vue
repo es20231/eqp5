@@ -94,6 +94,7 @@ export default {
             }
 
             try {
+                CookieHelper.deleteCookie('token');
                 const response = await api.post("/login/", {
                     email: this.email,
                     password: this.password,
