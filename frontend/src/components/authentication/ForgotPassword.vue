@@ -43,13 +43,12 @@
                 </div>
             </div>
         </div>
-        <ModalError v-if="!userExists" :show="!userExists" :message="errorMessages.userNotFound"
-            @close="userExists = true" />
+        <modal-error v-if="responseMessage" :show="true" :message="responseMessage" @close="responseMessage = null" />
     </div>
 </template>
   
 <script>
-import ModalError from '@/components/err/ModalError.vue'; // Importe o componente ModalError
+import ModalError from '@/components/err/ModalError.vue';
 import api from '@/config/api';
 
 export default {
@@ -65,7 +64,7 @@ export default {
             showResendButton: false,
             timeRemaining: 30,
             showConfirmation: false,
-            userExists: true,
+            responseMessage: null,
             errorMessages: {
                 userNotFound: "Usuário não encontrado. Por favor, verifique o e-mail informado.",
                 genericError: "Erro ao processar a solicitação. Por favor, tente novamente mais tarde.",
@@ -101,22 +100,20 @@ export default {
                     this.showConfirmation = true;
                     setTimeout(() => {
                         this.showConfirmation = false;
-                    }, 3000);
-                    this.userExists = true;
+                    }, 10000);
                 } catch (error) {
                     if (error.response && error.response.status === 404) {
-                        this.userExists = false;
-                    } else {
-                        this.showErrorModal();
+                        this.showErrorMessage(this.errorMessages.userNotFound);
+                    } else if (error.response && error.response.status === 500) {
+                        this.showErrorMessage("Erro de conexão. Por favor, verifique sua conexão e tente novamente mais tarde.");
                     }
+                    setTimeout(() => {
+                        this.closeModal();
+                    }, 10000);
                 } finally {
                     this.loading = false;
                 }
             }
-        },
-        showErrorModal() {
-            this.$refs.errorModal.show = true;
-            this.$refs.errorModal.message = this.errorMessages.genericError;
         },
         startResendTimer() {
             this.showResendButton = true;
@@ -130,9 +127,11 @@ export default {
                 }
             }, 1000);
         },
-        resendEmail() {
-            this.showResendButton = false;
-            this.submitForm();
+        showErrorMessage(message) {
+            this.responseMessage = message;
+        },
+        closeModal() {
+            this.responseMessage = null;
         },
     },
 };
