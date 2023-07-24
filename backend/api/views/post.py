@@ -47,10 +47,7 @@ class PostAPIView(APIView):
         try:
             params = self.format_query_strings()
             if id:
-                filters = {
-                    "is_posted": eval(params.pop("is_posted", "True").title())
-                }
-                object = self.get_object(**filters)
+                object = self.get_object()
                 results = PostSerializer(instance=object, context={"request": request}).data
             elif not id:
                 per_page = int(params.pop("per_page", 10))
