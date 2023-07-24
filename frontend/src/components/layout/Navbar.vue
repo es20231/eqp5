@@ -14,7 +14,7 @@
             </div>
         </nav>
         <!-- Show the Sidebar and Menu component if "show" is true -->
-        <div v-if="show" class="menu-container" @click="hideMenu">
+        <div v-if="show" class="menu-container" @click="toggleSidebar">
             <div class="menu" style="z-index: 9999;">
                 <ul>
                     <li><router-link to="/index">Feed</router-link></li>
