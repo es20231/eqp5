@@ -41,7 +41,7 @@ h6 {
 }
 
 h1 {
-  font-family:"Billabong W00 Regular" , cursive;
+  font-family: "Billabong W00 Regular", cursive;
 }
 
 p {
@@ -10349,6 +10349,11 @@ a:focus {
 .topbar .nav-item .nav-link .img-profile {
   height: 2rem;
   width: 2rem
+}
+
+.img-profile {
+  width: 35px;
+  height: 35px;
 }
 
 .topbar {
