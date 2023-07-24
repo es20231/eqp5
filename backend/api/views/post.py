@@ -66,7 +66,7 @@ class PostAPIView(APIView):
                     filters["profile__user__id"] = params.pop("user_id")
                 if "username" in params:
                     filters["profile__user__username"] = params.pop("username")
-                if "my_posts" in params and eval(params.pop("my_post").title()):
+                if "my_posts" in params and eval(params.pop("my_posts").title()):
                     filters["profile__user__id"] = self.request.user.id
                 
                 objects = self.get_queryset().filter(**filters).order_by(ordering)
@@ -85,11 +85,7 @@ class PostAPIView(APIView):
         
     def patch(self, request: HttpRequest, id: int = None) -> Response:
         try:
-            params = self.format_query_strings()
-            filters = {
-                "is_posted": eval(params.pop("is_posted", "True").title())
-            }
-            post = self.get_object(**filters)
+            post = self.get_object()
             serializer = PostSerializer(instance=post, data=request.data, partial=True, context={"request": request})
             serializer.is_valid(raise_exception=True)
             serializer.save()
