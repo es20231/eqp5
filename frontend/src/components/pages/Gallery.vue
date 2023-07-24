@@ -22,7 +22,7 @@
         <h3 class="images-title">Imagens na galeria (10 ultimas)</h3>
         <!-- Image Gallery -->
         <div class="card-grid-container">
-            <div class="card-grid row">
+            <div class="card-grid row d-flex justify-content-start">
                 <div v-for="photo in photos" :key="photo.id" class="photo-card col-lg-4 col-md-4 col-sm-6 col-12">
                     <div class="card">
                         <a :href="photo.image" target="_blank">
@@ -135,7 +135,9 @@ export default {
                 this.selectedPhoto = null;
                 this.fetchPhotos();
             } catch (error) {
-                console.error("Error uploading photo:", error);
+                if (error.response && error.response.status === 500) {
+                    this.showErrorMessage("Ocorreu um erro de conexão. Por favor, tente novamente mais tarde.");
+                }
                 this.uploading = false;
             }
         },
@@ -145,7 +147,7 @@ export default {
         },
         async fetchPhotos() {
             try {
-                const response = await api.get("/posts/?my_post=true&is_posted=false", {
+                const response = await api.get("/posts/?my_posts=true&is_posted=false", {
                     headers: {
                         Authorization: "Bearer " + CookieHelper.getCookie("token"),
                     },
@@ -153,7 +155,11 @@ export default {
                 this.photos = response.data.results;
                 this.clearSelectedPhoto();
             } catch (error) {
-                this.showErrorMessage("Ocorreu um erro ao listar as imagens.");
+                if (error.response && error.response.status === 500) {
+                    this.showErrorMessage("Ocorreu um erro de conexão. Por favor, tente novamente mais tarde.");
+                }else{
+                    this.showErrorMessage("Ocorreu um erro ao listar as imagens.");
+                }
                 this.clearSelectedPhoto();
                 setTimeout(() => {
                     this.closeModal();
@@ -169,8 +175,13 @@ export default {
                 });
                 this.photos = this.photos.filter((photo) => photo.id !== this.selectedPhotoId);
                 this.hideDeleteConfirmation();
+                this.fetchPhotos();
             } catch (error) {
-                this.showErrorMessage("Ocorreu um erro ao deletar a imagem.");
+                if (error.response && error.response.status === 500) {
+                    this.showErrorMessage("Ocorreu um erro de conexão. Por favor, tente novamente mais tarde.");
+                }else{
+                    this.showErrorMessage("Ocorreu um erro ao deletar a imagem.");
+                }
                 setTimeout(() => {
                     this.closeModal();
                 }, 10000);
@@ -209,8 +220,12 @@ export default {
 
 .card-grid {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: flex-start;
+}
+
+.photo-card {
+    margin-bottom: 15px;
+    flex: 1;
 }
 
 .card {
@@ -220,10 +235,6 @@ export default {
     overflow: hidden;
     padding: 10px;
     position: relative;
-}
-
-.photo-card {
-    margin-bottom: 15px;
 }
 
 .card-img-top {
@@ -283,9 +294,7 @@ export default {
 
 .card-grid-container {
     max-height: 600px;
-    /* Altura máxima da div de rolagem */
     overflow-y: auto;
-    /* Habilita a rolagem vertical */
     overflow-x: hidden;
 }
 </style>
