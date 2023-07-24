@@ -47,10 +47,7 @@ class PostAPIView(APIView):
         try:
             params = self.format_query_strings()
             if id:
-                filters = {
-                    "is_posted": eval(params.pop("is_posted", "True").title())
-                }
-                object = self.get_object(**filters)
+                object = self.get_object()
                 results = PostSerializer(instance=object, context={"request": request}).data
             elif not id:
                 per_page = int(params.pop("per_page", 10))
@@ -102,11 +99,7 @@ class PostAPIView(APIView):
         
     def delete(self, request: HttpRequest, id: int = None) -> Response:
         try:
-            params = self.format_query_strings()
-            filters = {
-                "is_posted": eval(params.pop("is_posted", "True").title())
-            }
-            self.get_object(**filters).delete()
+            self.get_object().delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         except Exception as error:
             return Response(data={"error": str(error)}, status=status.HTTP_400_BAD_REQUEST)
