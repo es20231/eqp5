@@ -1,38 +1,35 @@
 <template>
-    <div class="container d-flex align-items-center justify-content-center" style="min-height: 100vh;">
+    <div class="container d-flex align-items-center justify-content-center" style="min-height: 100vh">
         <div class="col-xl-6 col-lg-6 col-md-9">
             <div class="card o-hidden border-0 shadow-lg mx-auto">
                 <div class="card-body p-0">
                     <div class="p-5">
                         <div class="text-center">
-                            <img :src="require('@/assets/img/img-logo.png')" alt="Logo" class="mb-2"
-                                style="max-width: 80px;">
+                            <img :src="require('@/assets/img/img-logo.png')" alt="Logo" class="mb-2" />
                             <h1 class="text-gray-900 mb-4">PostBook</h1>
                         </div>
                         <form class="user mb-3">
-                            <div v-if="responseMessage" :class="responseMessageType" class="alert mb-3">
-                                {{ responseMessage }}
-                            </div>
-                            <div class="form-group mb-4">
+                            <div class="form-group mb-3">
                                 <div class="input-group">
-                                    <span class="input-group-text">
-                                        <i class="fa-solid fa-envelope p-1"></i>
-                                    </span>
-                                    <input type="email" class="form-control form-control-user"
-                                        :class="{ 'is-invalid': emailError }" id="exampleInputEmail"
-                                        aria-describedby="emailHelp" placeholder="E-mail" v-model="email"
-                                        @input="validateEmail">
+                                    <span class="input-group-text"><i class="fa-solid fa-envelope p-1"></i></span>
+                                    <input type="email" class="form-control form-control-user" :class="inputClass('email')"
+                                        id="exampleInputEmail" aria-describedby="emailHelp" v-model="email"
+                                        placeholder="E-mail" />
                                 </div>
+                                <div v-if="fieldErrors.email" class="text-danger text-right small mt-1">{{ fieldErrors.email
+                                }}</div>
                             </div>
-                            <div class="form-group mb-4">
+                            <div class="form-group mb-3">
                                 <div class="input-group">
                                     <span class="input-group-text">
                                         <i class="fa-solid fa-lock p-1"></i>
                                     </span>
                                     <input type="password" class="form-control form-control-user"
-                                        :class="{ 'is-invalid': passwordError }" id="exampleInputPassword"
-                                        placeholder="Senha" v-model="password" @input="validatePassword">
+                                        :class="inputClass('password')" id="exampleInputPassword" v-model="password"
+                                        placeholder="Senha" />
                                 </div>
+                                <div v-if="fieldErrors.password" class="text-danger text-right small mt-1">{{
+                                    fieldErrors.password }}</div>
                             </div>
                             <button @click.prevent="submitForm" class="btn btn-primary btn-user btn-block">Entrar</button>
                         </form>
@@ -48,62 +45,92 @@
                 </div>
             </div>
         </div>
+        <modal-error :show="responseMessage" :message="responseMessage" @close="closeModal" />
     </div>
 </template>
-
+  
 <script>
-export default {
-    mounted() {
-        document.title = "PostBook";
-    },
+import api from "@/config/api";
+import CookieHelper from "@/util/cookieHelper";
+import ModalError from "@/components/err/ModalError.vue";
 
+export default {
+    components: {
+        ModalError,
+    },
     data() {
         return {
             email: "",
             password: "",
-            emailError: false, // Variável para indicar erro no e-mail
-            passwordError: false, // Variável para indicar erro na senha
-            responseMessage: "",
-            responseMessageType: "", // Classe dinâmica para o tipo de alerta
+            responseMessage: null,
+            fieldErrors: {
+                email: "",
+                password: "",
+            },
         };
     },
-
     methods: {
-        clearAlert() {
-            this.responseMessage = "";
-            this.responseMessageType = "";
-        },
-
         validateEmail() {
-            // Validar o formato do e-mail usando uma expressão regular simples
             const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            this.emailError = !emailPattern.test(this.email);
+            return emailPattern.test(this.email);
         },
-
         validatePassword() {
-            // Validar a senha para conter pelo menos 6 caracteres
-            this.passwordError = this.password.length < 6;
+            return this.password.length >= 6;
         },
+        validateForm() {
+            this.fieldErrors.email = this.validateEmail() ? "" : "Por favor, insira um e-mail válido.";
+            this.fieldErrors.password = this.validatePassword() ? "" : "A senha deve conter pelo menos 6 caracteres.";
+        },
+        inputClass(fieldName) {
+            return {
+                "is-invalid": this.fieldErrors[fieldName],
+            };
+        },
+        async submitForm() {
+            this.validateForm();
 
-        submitForm() {
-            this.validateEmail();
-            this.validatePassword();
+            if (this.fieldErrors.email || this.fieldErrors.password) {
+                return;
+            }
 
-            if (!this.emailError && !this.passwordError) {
-                if (this.email === "seu-email@exemplo.com" && this.password === "sua-senha") {
-                    this.responseMessage = "Login bem-sucedido!";
-                    this.responseMessageType = "alert-success";
-                } else {
-                    this.responseMessage = "Credenciais inválidas. Por favor, tente novamente.";
-                    this.responseMessageType = "alert-danger";
+            try {
+                CookieHelper.deleteCookie('token');
+                const response = await api.post("/login/", {
+                    email: this.email,
+                    password: this.password,
+                });
+
+                if (response.status === 200 && response.data.access) {
+                    const token = response.data.access;
+                    CookieHelper.setCookie("token", token, { secure: true });
+
+                    setTimeout(() => {
+                        this.$router.push({ name: "index" });
+                    }, 1000);
                 }
-
-                // Limpa o alerta após 10 segundos (10000ms)
+            } catch (error) {
+                if (error.response && error.response.status === 401) {
+                    this.showErrorMessage("E-mail ou senha incorretos. Por favor, tente novamente.");
+                } else {
+                    this.showErrorMessage("Erro ao fazer login. Por favor, verifique sua conexão e tente novamente mais tarde.");
+                }
                 setTimeout(() => {
-                    this.clearAlert();
+                    this.closeModal();
                 }, 10000);
             }
-        }
-    }
+        },
+        showErrorMessage(message) {
+            this.responseMessage = message;
+        },
+        closeModal() {
+            this.responseMessage = null;
+        },
+    },
 };
 </script>
+  
+<style scoped>
+img {
+    max-width: 80px;
+}
+</style>
