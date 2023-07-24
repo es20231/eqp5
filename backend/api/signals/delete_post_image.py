@@ -5,6 +5,6 @@ from django.dispatch import receiver
 
 
 @receiver(pre_delete, sender=Post)
-def delete_profile_photo(sender, instance, *args, **kwargs):
+def delete_post_image(sender, instance, *args, **kwargs):
     if old_instance := Post.objects.filter(id=instance.id).first():
         delete_image(old_instance)
