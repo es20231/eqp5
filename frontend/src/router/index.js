@@ -24,6 +24,12 @@ const routes = [
         component: () => import("../views/IndexView.vue"),
         meta: { requiresAuth: true },
     },
+    {
+        path: "/gallery",
+        name: "gallery",
+        component: () => import("../views/pages/GalleryView.vue"),
+        meta: { requiresAuth: true },
+    },
 ];
 
 const router = createRouter({

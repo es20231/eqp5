@@ -167,7 +167,7 @@ export default {
                             this.showErrorMessage("Cadastro realizado com sucesso.");
                             setTimeout(() => {
                                 this.$router.push("/");
-                            }, 3000);
+                            }, 8000);
                         }
                     } else {
                         this.showErrorMessage("Erro ao cadastrar. Por favor, tente novamente.");
