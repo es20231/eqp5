@@ -85,11 +85,7 @@ class PostAPIView(APIView):
         
     def patch(self, request: HttpRequest, id: int = None) -> Response:
         try:
-            params = self.format_query_strings()
-            filters = {
-                "is_posted": eval(params.pop("is_posted", "True").title())
-            }
-            post = self.get_object(**filters)
+            post = self.get_object()
             serializer = PostSerializer(instance=post, data=request.data, partial=True, context={"request": request})
             serializer.is_valid(raise_exception=True)
             serializer.save()
