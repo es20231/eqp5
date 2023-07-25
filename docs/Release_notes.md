@@ -34,13 +34,11 @@ com interação de postagens entre usuários.
 # Execução da aplicação:
 
 Back-end
-
 ```
 python manage.py runserver
 ```
 
 Front-end
-
 ```
 npm run serve
 ```
@@ -53,6 +51,10 @@ npm run serve
 
 # 5. Execução de testes unitários:
 
+Back-end
+```
+python manage.py tests
+```
 Front-end
 ```
 npm run test:unit
