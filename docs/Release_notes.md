@@ -7,7 +7,7 @@ com interação de postagens entre usuários.
 
 * Login de usuário;
 * Logout de usuário;
-* Cadasteo de usuário;
+* Cadastro de usuário;
 * Upload de imagens.
 
 # 2. Tecnologias, bibliotecas e framework desta versão:
