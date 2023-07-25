@@ -6,8 +6,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import HttpRequest
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from api.models import Profile
 from api.permissions import IsPostOwner
-
 
 class PostAPIView(APIView):
     permission_classes = [IsAuthenticated,]
