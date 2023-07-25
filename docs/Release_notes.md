@@ -5,31 +5,33 @@ com interação de postagens entre usuários.
 
 # 1. Features disponíveis para esta versão:
 
-* Login de usuário;
-* Logout de usuário;
-* Cadastro de usuário;
-* Upload de imagens.
+* Login de usuário
+* Logout de usuário
+* Recuperação de senha através de e-mail
+* Cadastro de novo usuário
+* Tela inicial
+* Upload de fotos
 
 # 2. Tecnologias, bibliotecas e framework desta versão:
 
-* Python;
-* Django;
-* Rest Framework;
-* Cors-headers;
-* DotEnv;
-* Pillow;
-* Pytest;
-* Vue.js;
-* Babel.js;
-* JavaScript;
-* Jest.
+* Python
+* Django
+* Rest Framework
+* Cors-headers
+* DotEnv
+* Pillow
+* Pytest
+* Vue.js
+* Babel.js
+* JavaScript
+* Jest
 
 # 3. Download, configuração, instalação e execução:
 
-* É preciso ter o Python instalado;
-* É preciso ter o Django instalado;
-* É preciso ter o MySQL instalado;
-* É preciso ter pip do Python instalado.
+* É preciso ter o Python instalado
+* É preciso ter o Django instalado
+* É preciso ter o MySQL instalado
+* É preciso ter pip do Python instalado
 
 # Execução da aplicação:
 
