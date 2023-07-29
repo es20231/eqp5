@@ -52,3 +52,13 @@ class UserAPIViewTest(APITestCase,APITestBase):
             }
         )
         self.assertEqual(response.status_code, 200)
+    
+    def test_forgot_password_error(self):
+        url = reverse("api:api_forgot_password")
+        response = self.client.post(
+            path=url,
+            data={
+                "email": "jhondoeaa@email.com"
+            }
+        )
+        self.assertEquals(response.status_code,404)
