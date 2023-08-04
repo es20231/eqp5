@@ -36,7 +36,8 @@ class PostAPIView(APIView):
 
     def post(self, request: HttpRequest) -> Post:
         try:
-            serializer = PostSerializer(data=request.data, context={"request": request})
+            data = request.data
+            serializer = PostSerializer(data=data, context={"request": request}, many=isinstance(data, list))
             serializer.is_valid(raise_exception=True)
             serializer.save(profile=self.get_user_profile())
             return Response(data=serializer.data, status=status.HTTP_201_CREATED)
