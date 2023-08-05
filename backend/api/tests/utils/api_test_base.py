@@ -61,7 +61,7 @@ class APITestBase:
             path=reverse("api:token_obtain_pair"),
             data={
                 "email": "jhondoe@email.com",
-                "password": "Qaz123456"
+                "password": "qaz12345"
             }
         )
         return {

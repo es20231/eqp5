@@ -62,3 +62,14 @@ class UserAPIViewTest(APITestCase,APITestBase):
             }
         )
         self.assertEquals(response.status_code,404)
+        
+    def test_logout_view(self):
+        # Obtenha a URL da view de logout usando o nome da URL
+        url = reverse("api:api_logout")
+        tokens = self.get_tokens()
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {tokens["access"]}')
+        # Envie uma solicitação POST para a URL de logout com o token de refresh
+        response = self.client.post(url, {'refresh': tokens['refresh']})
+
+        # Verifique se a resposta tem o status esperado (HTTP 205 RESET CONTENT)
+        self.assertEqual(response.status_code, 205)
