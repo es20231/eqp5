@@ -1,6 +1,6 @@
 # Teste da Aplicação
 
-## Testes Unitários (CT-TU) - Front-End
+## Testes Unitários (CT-TU)
 
 ### CT-TU-01 Teste de Unidade para o Componente SignIn.vue:
 
