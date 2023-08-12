@@ -25,7 +25,7 @@ class RemarkReaction(models.Model):
         verbose_name = "RemarkReaction"
         verbose_name_plural = "RemarkReactions"
         ordering = ("-updated_at",)
-        db_table = "remark_reaction"
+        db_table = "remark_reactions"
         constraints = [
             models.UniqueConstraint(
                 fields=["user", "remark"],
