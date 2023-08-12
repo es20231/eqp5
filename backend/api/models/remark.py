@@ -8,8 +8,8 @@ class Remark(models.Model):
     text = models.CharField(max_length=500, null=False, blank=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="remarks")
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="remarks")
-    likes = models.PositiveIntegerField(default=0)
-    dislikes = models.PositiveIntegerField(default=0)
+    number_of_likes = models.PositiveIntegerField(default=0)
+    number_of_dislikes = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return f"Remark {self.id} by {self.user.username} on post {self.post.id}"
