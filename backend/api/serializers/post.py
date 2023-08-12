@@ -11,8 +11,8 @@ class PostSerializer(serializers.ModelSerializer):
     )
     class Meta:
         model = Post
-        fields = ["id","image","description", "created_at", "profile", "updated_at", "is_posted", "username"]
-        read_only_fields = ["created_at", "updated_at"]
+        fields = ["id","image","description", "created_at", "profile", "updated_at", "is_posted", "username", "number_of_remarks", "number_of_likes", "number_of_dislikes"]
+        read_only_fields = ["created_at", "updated_at", "number_of_remarks", "number_of_likes", "number_of_dislikes"]
 
     def create(self, validated_data: dict) -> Post:
         if isinstance(validated_data, list):
