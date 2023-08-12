@@ -33,11 +33,17 @@ class ProfileAPIView(APIView):
                 object = self.get_queryset().get(id=id)
                 results = ProfileSerializer(instance=object, context={"request": request}).data
             if not id:
+                filters = {}
                 params = request.query_params.copy()
                 params = {key: params[key] for key in params.keys()}
                 per_page = int(params.pop("per_page", 10))
                 page = int(params.pop("page", 1))
-                objects = self.get_queryset()
+
+                if "user_id" in params:
+                    filters["user__id"] = params.pop("user_id")
+                if "username" in params:
+                    filters["user__username"] = params.pop("username")
+                objects = self.get_queryset().filter(**filters)
                 results = paginate_response(
                     items=objects,
                     serializer=ProfileSerializer,
