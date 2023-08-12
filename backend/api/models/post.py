@@ -13,6 +13,9 @@ class Post(models.Model):
     description = models.CharField(max_length=1000, null=True, blank=True)
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="posts")
     is_posted = models.BooleanField(default=False, null=False)
+    number_of_remarks = models.PositiveIntegerField(default=0)
+    number_of_likes = models.PositiveIntegerField(default=0)
+    number_of_dislikes = models.PositiveIntegerField(default=0)
 
     def save(self, *args, **kwargs) -> None:
         if self.image:
