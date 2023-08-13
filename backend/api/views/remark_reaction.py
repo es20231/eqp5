@@ -72,6 +72,10 @@ class RemarkReactionAPIView(APIView):
     def post(self, request: HttpRequest) -> Response:
         try:
             data = request.data
+            reaction = "dislike" if data.get("reaction") == "like" else "like"
+            remark_reaction = RemarkReaction.objects.all().filter(user__id=request.user.id, reaction=reaction)
+            if remark_reaction:
+                remark_reaction.first().delete()
             serializer = RemarkReactionSerializer(data=data, context={"request": request})
             serializer.is_valid(raise_exception=True)
             serializer.save(user=request.user)
