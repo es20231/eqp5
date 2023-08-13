@@ -1,3 +1,4 @@
 from .create_profile import create_profile
 from .update_post_image import update_post_image
 from .delete_post_image import delete_post_image
+from .like_or_dislike_remark import like_or_dislike_remark
