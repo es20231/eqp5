@@ -22,5 +22,7 @@ urlpatterns = [
     path('remarks/', views.RemarkAPIView.as_view(), name="remark_api_list"),
     path('remarks/<int:id>/', views.RemarkAPIView.as_view(), name="remark_api_detail"),
     path('remark-reactions/', views.RemarkReactionAPIView.as_view(), name="remark_reaction_api_list"),
-    path('remark-reactions/<int:id>/', views.RemarkReactionAPIView.as_view(), name="remark_reaction_api_detail")
+    path('remark-reactions/<int:id>/', views.RemarkReactionAPIView.as_view(), name="remark_reaction_api_detail"),
+    path('post-reactions/', views.PostReactionAPIView.as_view(), name="post_reaction_api_list"),
+    path('post-reactions/<int:id>/', views.PostReactionAPIView.as_view(), name="post_reaction_api_detail")
 ]
