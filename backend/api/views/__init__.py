@@ -6,3 +6,4 @@ from .logout import LogoutAPIView
 from .me import MeAPIView
 from .remark import RemarkAPIView
 from .remark_reaction import RemarkReactionAPIView
+from .post_reaction import PostReactionAPIView
