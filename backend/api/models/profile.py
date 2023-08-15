@@ -2,6 +2,7 @@ from django.db import models
 from api.models import User
 
 class Profile(models.Model):
+    image = models.ImageField(null=True, blank=True, upload_to=f"profiles/images/%Y/%m/%d/")
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=False)
     description = models.CharField(max_length=500, null=True, blank=True)
 
