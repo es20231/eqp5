@@ -24,6 +24,10 @@ class Post(models.Model):
             if img_size > size_limit:
                  raise ValueError("A imagem excede o tamanho máximo permitido (10 MB).")
         return super().save(*args, **kwargs)
+    
+    @property
+    def username(self) -> str:
+        return self.profile.username
 
     class Meta:
         verbose_name = "Post"
