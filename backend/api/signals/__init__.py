@@ -6,3 +6,4 @@ from .remove_like_or_dislike_remark import remove_like_or_dislike_remark
 from .like_or_dislike_post import like_or_dislike_post
 from .remove_like_or_dislike_post import remove_like_or_dislike_post
 from .create_post_remark import create_post_remark
+from .remove_post_remark import remove_post_remark
