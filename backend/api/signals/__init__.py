@@ -3,3 +3,4 @@ from .update_post_image import update_post_image
 from .delete_post_image import delete_post_image
 from .like_or_dislike_remark import like_or_dislike_remark
 from .remove_like_or_dislike_remark import remove_like_or_dislike_remark
+from .like_or_dislike_post import like_or_dislike_post
