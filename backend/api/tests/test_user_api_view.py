@@ -107,3 +107,42 @@ class UserAPIViewTest(APITestCase,APITestBase):
                                           'profile':1})
 
         self.assertEqual(response.status_code, 201)
+    
+    def test_upload_noAuth_view(self):
+        url = reverse("api:post_api_list")
+        tokens = self.get_tokens()
+
+        with open(
+            os.path.join(
+                os.path.dirname(__file__),
+                "test.jpg"
+            ),
+            'rb'
+        ) as fp:
+            image_data = fp.read()
+
+        response = self.client.post(url, data={'image': SimpleUploadedFile('test.jpg', image_data),
+                                          'description':"imagem teste",
+                                          'profile':1})
+
+        self.assertEqual(response.status_code, 401)
+    
+    def test_get_post_view(self):
+        url = reverse("api:post_api_list")
+        tokens = self.get_tokens()
+
+
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {tokens["access"]}')
+        response = self.client.get(url, data={'id': 1})
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_delete_post_view(self):
+        url = reverse("api:post_api_list")
+        tokens = self.get_tokens()
+
+
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {tokens["access"]}')
+        response = self.client.delete(url, data={'id': 1})
+
+        self.assertEqual(response.status_code, 204)
