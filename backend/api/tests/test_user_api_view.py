@@ -2,6 +2,13 @@ from api.views import UserAPIView
 from rest_framework.test import APITestCase
 from django.urls import resolve, reverse
 from api.tests.utils import APITestBase
+from django.core.files.uploadedfile import SimpleUploadedFile
+from PIL import Image
+from io import BytesIO
+from django.core.files.base import ContentFile
+import base64
+import os
+
 
 
 class UserAPIViewTest(APITestCase,APITestBase):
@@ -73,3 +80,30 @@ class UserAPIViewTest(APITestCase,APITestBase):
 
         # Verifique se a resposta tem o status esperado (HTTP 205 RESET CONTENT)
         self.assertEqual(response.status_code, 205)
+    def test_profile_get_view(self):
+        url = reverse("api:profile_api_list")
+        tokens = self.get_tokens()
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {tokens["access"]}')
+        response = self.client.get(url, {'id': 1})
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_upload_post_view(self):
+        url = reverse("api:post_api_list")
+        tokens = self.get_tokens()
+
+        with open(
+            os.path.join(
+                os.path.dirname(__file__),
+                "test.jpg"
+            ),
+            'rb'
+        ) as fp:
+            image_data = fp.read()
+
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {tokens["access"]}')
+        response = self.client.post(url, data={'image': SimpleUploadedFile('test.jpg', image_data),
+                                          'description':"imagem teste",
+                                          'profile':1})
+
+        self.assertEqual(response.status_code, 201)
