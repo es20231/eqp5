@@ -137,12 +137,10 @@ class UserAPIViewTest(APITestCase,APITestBase):
 
         self.assertEqual(response.status_code, 200)
 
-    def test_delete_post_view(self):
-        url = reverse("api:post_api_list")
-        tokens = self.get_tokens()
+    def test_recuperacao_email_post_view(self):
+        url = reverse("api:api_forgot_password")
+        user = self.create_user()
 
+        response = self.client.post(url, data={'email': 'jhondoe@email.com'})
 
-        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {tokens["access"]}')
-        response = self.client.delete(url, data={'id': 1})
-
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 201)
