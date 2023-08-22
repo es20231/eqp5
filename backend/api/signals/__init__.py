@@ -8,3 +8,4 @@ from .remove_like_or_dislike_post import remove_like_or_dislike_post
 from .create_post_remark import create_post_remark
 from .remove_post_remark import remove_post_remark
 from .update_profile_image import update_profile_image
+from .delete_profile_image import delete_profile_image
