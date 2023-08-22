@@ -8,3 +8,4 @@ from .remark import RemarkAPIView
 from .remark_reaction import RemarkReactionAPIView
 from .post_reaction import PostReactionAPIView
 from .connection import ConnectionAPIView
+from .search import SerachAPIView
