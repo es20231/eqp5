@@ -1,6 +1,7 @@
 import { RouterLinkStub, shallowMount } from "@vue/test-utils";
 import Gallery from '@/components/pages/Gallery.vue';
 import router from "@/router";
+import { nextTick } from "vue";
 
 let wrapper
 
@@ -9,9 +10,9 @@ beforeAll(() =>{
         global:{
             plugins: [router],
             stubs: {
-                RouterLink: RouterLinkStub
-            }
-        }
+                RouterLink: RouterLinkStub,
+            },
+        },
     })
 })
 
@@ -30,21 +31,23 @@ describe('Gallery.vue tests', ()=>{
         const event = {
             target:{
                 files:[
-                    {
-                        name: 'image.png',
+                     {
+                        name: 'image.jpg',
                         size: 50000,
-                        type: 'image/png',
+                        type: 'image/jpg',
                     }
                 ]
             }
         }
 
         const fileReaderSpy = jest.spyOn(FileReader.prototype, 'readAsDataURL').mockImplementation(()=> null)
-        wrapper.vm.onFileChange(event)
+        await wrapper.vm.onFileChange(event)
+        wrapper.vm.$nextTick()
+        expect(wrapper.instance().refInput).toBeTruthy()
         expect(fileReaderSpy).toHaveBeenCalledWith(event.target.files[0])
     })
 
-    /*it('should be not uploaded', async()=>{
+    it('should be not uploaded', async()=>{
         const event = {
             target:{
                 files:[
@@ -56,10 +59,10 @@ describe('Gallery.vue tests', ()=>{
                 ]
             }
         }
-        
-        wrapper.vm.onFileChange(event)
+        await wrapper.vm.onFileChange(event)
+        wrapper.vm.$nextTick()
         expect(wrapper.vm.showErrorMessage).toEqual('A imagem selecionada tem tamanho maior que o permitido.')
-    })*/
+    })
 
     /*it('should be showed a error in fetchPhotos', async()=>{
         await wrapper.vm.fetchPhotos()

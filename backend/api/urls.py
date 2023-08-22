@@ -19,6 +19,6 @@ urlpatterns = [
     path('profiles/<int:id>/', views.ProfileAPIView.as_view(), name="profile_api_detail"),
     path('posts/', views.PostAPIView.as_view(), name="post_api_list"),
     path('posts/<int:id>/', views.PostAPIView.as_view(), name="post_api_detail"),
-    path('remarks/', views.RemarkAPIView.as_view(), name="remark_api_list"),
-    path('remarks/<int:id>/', views.RemarkAPIView.as_view(), name="remark_api_detail"),
+    #path('remarks/', views.RemarkAPIView.as_view(), name="remark_api_list"),
+    #path('remarks/<int:id>/', views.RemarkAPIView.as_view(), name="remark_api_detail"),
 ]
