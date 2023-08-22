@@ -67,10 +67,13 @@ class PostAPIView(APIView):
                     filters["profile__user__id"] = params.pop("user_id")
                 if "username" in params:
                     filters["profile__user__username"] = params.pop("username")
-                if "my_posts" in params and eval(params.pop("my_posts").title()):
+                if "my_posts" in params and eval(params.get("my_posts").title()):
                     filters["profile__user__id"] = self.request.user.id
                 
                 objects = self.get_queryset().filter(**filters).order_by(ordering)
+
+                if "my_posts" in params and not eval(params.pop("my_posts").title()):
+                    objects = objects.exclude(profile__user__id=request.user.id)
 
                 results = paginate_response(
                     items=objects,
