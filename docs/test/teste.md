@@ -84,6 +84,59 @@
 * CT-TM-02-C1: verificar se o login está sendo feito;
 * CT-TM-02-C2: verificar se a validação de _email_ está sendo feita;
 * CT-TM-02-C3: verificar se a validação de senha está sendo feita;
-* CT-TM-03-C4: verificar se a validação de login está sendo feita.
+* CT-TM-02-C4: verificar se a validação de login está sendo feita.
 
 ### CT-TM-03 Teste Manual de Upload:
+
+* CT-TM-03-C1: verificar se o _upload_ está sendo feito;
+* CT-TM-03-C2: verificar se a imagem está sendo exibida após o _upload_;
+* CT-TM-03-C3: verificar se a função _delete_ está funcionando normalmente;
+* CT-TM-03-C4: verificar se é permitido fazer _upload_ de mais de uma imagem;
+* CT-TM-03-C5: verificar se a paginação está funcionando;
+* CT-TM-03-C6: verificar se é possível fazer multiplos _uploads_.
+
+## Teste de Integração
+
+### CT-TI-01 Teste de Integração de Cadastro:
+
+* CT-TI-01-C1: verificar se um novo cadastro está sendo feito;
+* CT-TI-01-C2: verificar se a validação de _username_ está sendo feita;
+* CT-TI-01-C3: verificar se a validação de _name_ está sendo feita;
+* CT-TI-01-C4: verificar se a validação de _email_ está sendo feita;
+* CT-TI-01-C5: verificar se a validação de senha está sendo feita;
+* CT-TI-01-C6: verificar se a validação de confirmação de senha está seneo feita;
+* CT-TI-01-C7: verificar se a validação de cadastro está sendo feita.
+
+### CT-TI-02 Teste de Integração de Login:
+
+* CT-TI-02-C1: verificar se o login está sendo feito;
+* CT-TI-02-C2: verificar se a validação de _email_ está sendo feita;
+* CT-TI-02-C3: verificar se a validação de senha está sendo feita;
+* CT-TI-02-C4: verificar se a validação de login está sendo feita.
+
+### CT-TI-03 Teste Integração de Upload:
+
+* CT-TI-03-C1: verificar se o _upload_ está sendo feito;
+* CT-TI-03-C2: verificar se a imagem está sendo exibida após o _upload_;
+* CT-TI-03-C3: verificar se a função _delete_ está funcionando normalmente;
+* CT-TI-03-C4: verificar se é permitido fazer _upload_ de mais de uma imagem;
+* CT-TI-03-C5: verificar se a paginação está funcionando;
+* CT-TI-03-C6: verificar se é possível fazer multiplos _uploads_.
+
+## Testes de Sistema
+
+### CT-TS-01 Teste de Sistema de Cadastro:
+
+* CT-TS-01-C1: verificar se o cadastro está funcionando conforme o fluxo principal;
+* CT-TS-01-C2: verificar se o _link_ de login está funcionando conforme o fluxo alternativo;
+
+## CT-TS-02: Teste de Sistema de Login:
+
+* CT-TS-02-C1: verificar se o login está funcionando conforme o fluxo principal;
+* CT-TS-02-C2: verificar se o _link_ de recuperação de senha está funcionando conforme o fluxo alternativo;
+* CT-TS-02-C3: verificar se o _link_ de cadastro está funcionando conforme o fluxo alternativo.
+
+## CT-TS-03: Teste de Sistema de Upload:
+
+* CT-TS-03-C1: verificar se a função _delete_ está funcionando conforme o fluxo alternativo;
+* CT-TS-03-C2: verificar se a paginação está funcionando conforme o fluxo alternativo.
