@@ -66,3 +66,24 @@
 * CT-TU-08-C1: verificar se o componente foi renderizado;
 * CT-TU-08-C2: verificar se os botões estão renderizando;
 * CT-TU-08-C3: verificar se as fotos estão sendo inseridas na entrada corretamente.
+
+## Testes Manuais
+
+### CT-TM-01 Teste Manual de Cadastro:
+
+* CT-TM-01-C1: verificar se um novo cadastro está sendo feito;
+* CT-TM-01-C2: verificar se a validação de _username_ está sendo feita;
+* CT-TM-01-C3: verificar se a validação de _name_ está sendo feita;
+* CT-TM-01-C4: verificar se a validação de _email_ está sendo feita;
+* CT-TM-01-C5: verificar se a validação de senha está sendo feita;
+* CT-TM-01-C6: verificar se a validação de confirmação de senha está seneo feita;
+* CT-TM-01-C7: verificar se a validação de cadastro está sendo feita.
+
+### CT-TM-02 Teste Manual de Login:
+
+* CT-TM-02-C1: verificar se o login está sendo feito;
+* CT-TM-02-C2: verificar se a validação de _email_ está sendo feita;
+* CT-TM-02-C3: verificar se a validação de senha está sendo feita;
+* CT-TM-03-C4: verificar se a validação de login está sendo feita.
+
+### CT-TM-03 Teste Manual de Upload:
