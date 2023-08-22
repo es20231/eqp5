@@ -4,3 +4,4 @@ from .is_post_owner import IsPostOwner
 from .is_remark_from_user_post import IsRemarkFromUserPost
 from .is_remark_owner import IsRemarkOwner
 from .is_reaction_owner import IsReactionOwner
+from .is_connection_owner import IsConnectionOwner
