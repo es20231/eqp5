@@ -38,3 +38,44 @@ CT-TU-07-C4,verificar se o link para a página 'gallery' está funcionando,Unit�
 CT-TU-08-C1,verificar se o componente foi renderizado,Unitário,Passed
 CT-TU-08-C2,verificar se os botões estão renderizando,Unitário,Passed
 CT-TU-08-C3,verificar se as fotos estão sendo inseridas na entrada corretamente,Unitário,Passed
+CT-TM-01-C1,verificar se um novo cadastro está sendo feito,Manual,Passed
+CT-TM-01-C2,verificar se a validação de username está sendo feita,Manual,Passed
+CT-TM-01-C3,verificar se a validação de name está sendo feita,Manual,Passed
+CT-TM-01-C4,verificar se a validação de email está sendo feita,Manual,Passed
+CT-TM-01-C5,verificar se a validação de senha está sendo feita,Manual,Passed
+CT-TM-01-C6,verificar se a validação de confirmação de senha está sendo feita,Manual,Passed
+CT-TM-01-C7,verificar se a validação de cadastro está sendo feita,Manual,Passed
+CT-TM-02-C1,verificar se o login está sendo feito,Manual,Passed
+CT-TM-02-C2,verificar se a validação de email está sendo feita,Manual,Passed
+CT-TM-02-C3,verificar se a validação de senha está sendo feita,Manual,Passed
+CT-TM-02-C4,verificar se a validação de login está sendo feita,Manual,assed
+CT-TM-03-C1,verificar se o upload está sendo feito,Manual,Passed
+CT-TM-03-C2,verificar se a imagem está sendo exibida após o upload,Manual,Passed
+CT-TM-03-C3,verificar se a função delete está funcionando normalmente,Manual,Passed
+CT-TM-03-C4,verificar se é permitido fazer upload de mais de uma imagem,Manual,Passed
+CT-TM-03-C5,verificar se a paginação está funcionando,Manual,Passed
+CT-TM-03-C6,verificar se é possível fazer multiplos uploads,Manual,Passed
+CT-TI-01-C1,verificar se um novo cadastro está sendo feito,Integração,Passed
+CT-TI-01-C2,verificar se a validação de username está sendo feita,Integração,Passed
+CT-TI-01-C3,verificar se a validação de name está sendo feita,Integração,Passed
+CT-TI-01-C4,verificar se a validação de email está sendo feita,Integração,Passed
+CT-TI-01-C5,verificar se a validação de senha está sendo feita,Integração,Passed
+CT-TI-01-C6,verificar se a validação de confirmação de senha está sendo feita,Integração,Passed
+CT-TI-01-C7,verificar se a validação de cadastro está sendo feita,Integração,Passed
+CT-TI-02-C1,verificar se o login está sendo feito,Integração,Passed
+CT-TI-02-C2,verificar se a validação de email está sendo feita,Integração,Passed
+CT-TI-02-C3,verificar se a validação de senha está sendo feita,Integração,Passed
+CT-TI-02-C4,verificar se a validação de login está sendo feita,Integração,Passed
+CT-TI-03-C1,verificar se o upload está sendo feito,Integração,Passed
+CT-TI-03-C2,verificar se a imagem está sendo exibida após o upload,Integração,Passed
+CT-TI-03-C3,verificar se a função delete está funcionando normalmente,Integração,Passed
+CT-TI-03-C4,verificar se é permitido fazer upload de mais de uma imagem,Integração,Passed
+CT-TI-03-C5,verificar se a paginação está funcionando,Integração,Passed
+CT-TI-03-C6,verificar se é possível fazer multiplos uploads,Integração,Passed
+CT-TS-01-C1,verificar se o cadastro está funcionando conforme o fluxo principal,Sistema,Passed
+CT-TS-01-C2,verificar se o link de login está funcionando conforme o fluxo alternativo,Sistema,Passed
+CT-TS-02-C1,verificar se o login está funcionando conforme o fluxo principal,Sistema,Passed
+CT-TS-02-C2,verificar se o link de recuperação de senha está funcionando conforme o fluxo alternativo,Sistema,Passed
+CT-TS-02-C3,verificar se o link de cadastro está funcionando conforme o fluxo alternativo,Sistema,Passed
+CT-TS-03-C1,verificar se a função delete está funcionando conforme o fluxo alternativo,Sistema,Passed
+CT-TS-03-C2,verificar se a paginação está funcionando conforme o fluxo alternativo,Sistema,Passed
